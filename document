@@ -1,0 +1,68 @@
+sudo -i gedit /etc/hosts
+cấu hình domain 
+
+git fetch -p
+git stash
+composer dump-autoload
+git rm -f .gitattributes
+git reset --h
+git stash apply
+
+cache:clera
+config:clear 
+php artisan config:cache
+php artisan view:clear
+php artisan session:clear
+
+https://serversforhackers.com/c/configuring-apache-virtual-hostsphp 
+
+
+$ scp -i id_rsa ３Dイメージ検討方法.pdf marinax@54.238.214.205:/srv/familystore.lixil.co.jp/var/www/storage/app/public/uploads/pdf３Dイメージ検討方法.pdf              100%  754KB 754.4KB/s   00:00 
+   
+git reset HEAD ubuntu-xenial-16.04-cloudimg-console.log
+
+Logger cung cấp 8 cấp độ cơ bản theo định nghĩa RFC 5424: emergency, alert, critical, error, warning, notice, info and debug.
+
+sudo fdisk -l 
+
+$validator = Validator::make($request->all(), []);
+
+ $validator->sometimes('email', 'unique:users,email', function ($input) {
+            return $input->email !== Auth::user()->email;
+        });
+
+eq() equals
+ne() not equals
+gt() greater than
+gte() greater than or equals
+lt() less than
+lte() less than or equals
+
+config mail 
+
+php artisan queue:listen
+
+nohup: ignoring input and appending output to 'nohup.out'
+
+readonly="readonly"
+
+$arrs = [];        foreach ($results as $key => $value) {            if(isset($arrs[$value['id']]))  {                $arrs[$value['id']]['tags'][] = $value['tags'];            } else {                $arrs[$value['id']] = $value;                $arrs[$value['id']]['tags'] = [$arrs[$value['id']]['tags']];            }        }
+
+Gỡ cài đặt một module trong Node.js
+$ npm uninstall express
+$ npm ls
+Cài đặt các Module bởi sử dụng npm trong Node.js
+
+$ npm install <Module Name>
+$ npm install express
+Cập nhật một Module trong Node.js
+$ npm update express
+Tìm kiếm một Module trong Node.js
+$ npm search express
+
+git rm -f .gitattributes
+ git reset --h
+   $timeNow = Carbon::now();
+        $dateLimit = Carbon::parse($timeNow)->addDay(7);
+        dd($timeNow);
+
