@@ -1,0 +1,25 @@
+It is making me mad that I want to setup a cronjob for PHP script in ubuntu 16.04.
+
+I enter this command in terminal
+
+$ crontab -e
+
+Then I choose nano editor which is recommended by ubuntu. Then I enter the blow line into that. Then I press control+C, it asking Y/N for save. I press Y and F2 for close.
+
+* * * * * php /var/www/html/familystore/artisan schedule:run >> /dev/null 2>&1
+
+other tries are,
+
+* */2 * * * /var/www/html/script.php
+* */2 * * * root /var/www/html/script.php
+After I restart cron using below command.
+
+sudo /etc/init.d/cron restart
+service cron status
+Then I check crontab list crontab -l it says no cron job set for the root user.
+
+I tried to directly create a crontab.txt file into the cron.hourly / cron.d directory with one of the above line.
+
+I tried numerous forum and all says crontab -e then enter or create crontab file inside cron directory. Nothing is helping me. I am scratching my head.
+
+What is the correct way to create cronjob for php script in ubuntu 16.04 & php version 7.0
