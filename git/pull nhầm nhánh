@@ -1,0 +1,7 @@
+git reflog
+bb3139b... HEAD@{0}: pull : Fast forward
+01b34fa... HEAD@{1}: clone: from ...name...
+
+tiếp theo 
+
+git reset --hard a0d3fe6
