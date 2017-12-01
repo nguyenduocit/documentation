@@ -1,0 +1,135 @@
+input {  
+	file {    
+		path => [ "/var/log/*.log", "/var/log/messages", "/var/log/syslog" ]    
+		type => "syslog"  
+		}
+	}
+filter {  
+	if [type] == "syslog" {    
+	grok {      
+		match => { 
+			"message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }      
+		add_field => [ "received_at", "%{@timestamp}" ]      
+		add_field => [ "received_from", "%{host}" ]    
+		}    
+	syslog_pri { }    
+	date {      
+		match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]    
+	}  }}
+output {  elasticsearch {   
+	hosts => "192.168.33.11:9200"  
+	index => "log-%{+YYYY.MM.dd}"  
+	}}
+
+
+input {
+  stdin { }
+}
+
+filter {  
+	if [type] == "syslog" {    
+	grok {      
+		match => { 
+			"message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }      
+		add_field => [ "received_at", "%{@timestamp}" ]      
+		add_field => [ "received_from", "%{host}" ]    
+		}    
+	syslog_pri { }    
+	date {      
+		match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]    
+	}  }}
+output {  elasticsearch {   
+	  hosts: ["192.168.33.11:9200"]
+	 template.name: "metricbeat"
+	  template.path: "metricbeat.template.json"
+	  template.overwrite: false
+	}}
+
+
+input {  beats {    host => "192.168.33.11"    port => 5044    codec => "json"  }}
+filter {
+        if [type] == "syslog" {
+        grok {
+                match => {
+                        "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+                add_field => [ "received_at", "%{@timestamp}" ]
+                add_field => [ "received_from", "%{host}" ]
+                }
+        syslog_pri { }
+        date {
+                match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+        }  }}
+output {  elasticsearch {
+          hosts: ["192.168.33.11:9200"]
+         template.name: "metricbeat"
+          template.path: "metricbeat.template.json"
+        index => "metricbeat-%{+YYYY.MM.dd}"
+        }}
+
+
+
+
+
+
+
+
+
+
+
+
+input {  file {    
+		path => "/var/log/apache2/access.log"    
+		type => "apache-access"  
+		}
+	}
+filter {      grok {         
+		match => [         "message" , "%{COMBINEDAPACHELOG}+%{GREEDYDATA:extra_fields}",         "message" , "%{COMMONAPACHELOG}+%{GREEDYDATA:extra_fields}"         ]        
+		overwrite => [ "message" ]      
+		}      
+	      mutate {         
+		convert => ["response", "integer"]         
+		convert => ["bytes", "integer"]         
+		convert => ["responsetime", "float"]      
+		}      
+	     geoip {         
+		source => "clientip"         
+		target => "geoip"         
+		add_tag => [ "apache-geoip" ]     
+		 }      
+	     date {         
+	     match => [ "timestamp" , "dd/MMM/YYYY:HH:mm:ss Z" ]         
+	     remove_field => [ "timestamp" ]      
+	          }      
+	     useragent {  
+      
+	     source => "agent"      }   }
+output {    elasticsearch {        
+		hosts => ["http://192.168.33.11:9200"]        
+		}
+	}
+
+input {
+        file {
+                path => [ "/var/log/*.log", "/var/log/messages", "/var/log/syslog" ]
+                type => "syslog"
+                }
+        }
+filter {
+        if [type] == "syslog" {
+        grok {
+                match => {
+                        "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+                add_field => [ "received_at", "%{@timestamp}" ]
+                add_field => [ "received_from", "%{host}" ]
+                }
+        syslog_pri { }
+        date {
+                match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+        }  }}
+output {  elasticsearch {
+        hosts => "192.168.33.11:9200"
+        index => "log-%{+YYYY.MM.dd}"
+        }}
+
+
+
